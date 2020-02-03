@@ -1,30 +1,31 @@
 //npm packages
 //for mysql connection
-var mysql = require("mysql");
+const mysql = require("mysql");
+
+const {addDepartment, addRole, addEmployee} = require('./Assets/lib/create');
+const {deleteDepartment, deleteRole, deleteEmployee} = require('./Assets/lib/delet');
+const {viewDepartment, viewRole, viewEmployee, viewEmployeesByManager, viewTotalBudgetOfDepartment} = require('./Assets/lib/view');
+const {updateEmployeeRole, updateEmployeeManager} = require('./Assets/lib/update');
 
 // for user input collection
 const inquirer = require('inquirer');
-var table = require("console.table");
 
 
+let userOption = '';
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
-
     // Your port; if not 3306
     port: 3306,
-
     // Your username
     user: "root",
-
     // Your password
     password: "root",
     database: "employeeDB"
 });
 
 
-
-function runSearch() {
+const options = () => {
     inquirer
         .prompt({
             name: "action",
@@ -41,69 +42,115 @@ function runSearch() {
                 "View the total utilized budget of a department",
                 "Update employee roles",
                 "Update employee managers",
-                "Delete departments",
-                "Delete roles",
                 "Delete employee",
+                "Delete roles",
+                "Delete departments",
                 "exit"
             ]
         })
-        .then(function(answer) {
+        .then(function (answer) {
+            userOption = answer.action;
             switch (answer.action) {
+
                 case "Add departments":
-                    addDepartment();
+                    addDepartment(connection);
                     break;
 
                 case "Add roles":
-                    addRole();
+                    addRole(connection);
                     break;
 
                 case "Add employees":
-                    addEmployee();
+                    addEmployee(connection);
                     break;
 
                 case "View departments":
-                    viewDepartment();
+                    viewDepartment(connection, options);
                     break;
 
                 case "View roles":
-                    viewRole();
+                    viewRole(connection, options);
                     break;
 
                 case "View employees":
-                    viewEmployee();
+                    viewEmployee(connection, options);
                     break;
 
                 case "View employees by manager":
-                    viewEmployeesByManager();
+                    viewEmployeesByManager(connection, options);
                     break;
 
                 case "View the total utilized budget of a department":
-                    viewTotalBudgetOfDepartment();
+                    viewTotalBudgetOfDepartment(connection, options);
                     break;
 
                 case "Update employee roles":
-                    updateEmployeeRole();
+                    updateEmployeeRole(connection);
                     break;
 
                 case "Update employee managers":
-                    updateEmployeeManager();
-                    break;
-
-                case "Delete departments":
-                    deleteDepartment();
-                    break;
-
-                case "Delete roles":
-                    deleteRole();
+                    updateEmployeeManager(connection);
                     break;
 
                 case "Delete employee":
-                    deleteRole();
+                    deleteEmployee(connection);
+                    break;
+
+                case "Delete roles":
+                    deleteRole(connection);
+                    break;
+
+                case "Delete departments":
+                    deleteDepartment(connection);
                     break;
 
                 case "exit":
                     connection.end();
                     break;
             }
+            // if(userOption!=="exit"){
+            //     options();
+            // }
         });
 }
+
+// Printing a home screen
+function displayBoard() {
+    const str = `
+         ________                                                                 
+        |  ______|
+        | |         ___    ___   ______   _        ___   _     _   _____   _____ 
+        | |___     |   \\  /   | |  __  | | |      / _ \\  \\ \\  / / |  ___| |  ___|
+        |  ___|    | |\\ \\/ /| | | |__| | | |     | / \\ |  \\ \\/ /  | |_    | |_
+        | |        | | \\__/ | | |  ____| | |     | | | |   \\  /   |  _|   |  _|
+        | |______  | |      | | | |      | |___  | \\_/ /   | |    | |___  | |___ 
+        |________| |_|      |_| |_|      |_____|  \\___/    |_|    |_____| |_____| 
+                                     ______    ______ 
+                                    |  ___ \\  |  ___ \\
+                                    | |   \\ | | |   \\ |
+                                    | |   | | | |___/ /
+                                    | |   | | |  ___ |
+                                    | |   | | | |   \\ \\
+                                    | |___/ | | |___/ |
+                                    |______/  |______/
+                                    `
+    console.log(str);
+
+}
+
+
+
+const main = () => {
+    displayBoard();
+    options();
+}
+
+// module.exports={options};
+
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("connected as id " + connection.threadId + "\n");
+    main();
+});
+
+
