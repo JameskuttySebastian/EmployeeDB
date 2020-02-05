@@ -4,7 +4,7 @@ const mysql = require("mysql");
 
 const {addDepartment, addRole, addEmployee} = require('./Assets/lib/create');
 const {deleteDepartment, deleteRole, deleteEmployee} = require('./Assets/lib/delet');
-const {viewDepartment, viewRole, viewEmployee, viewEmployeesByManager, viewTotalBudgetOfDepartment} = require('./Assets/lib/view');
+const {viewDepartment, viewRole, viewEmployee, viewEmployeesByManager, viewTotalBudgetOfDepartment, viewDepartmentTable, viewRoleTable, viewEmployeeTable } = require('./Assets/lib/view');
 const {updateEmployeeRole, updateEmployeeManager} = require('./Assets/lib/update');
 
 // for user input collection
@@ -31,6 +31,7 @@ const options = () => {
             name: "action",
             type: "list",
             message: "What would you like to do?",
+            // choices: ["Add roles"]
             choices: [
                 "Add departments",
                 "Add roles",
@@ -48,20 +49,23 @@ const options = () => {
                 "exit"
             ]
         })
-        .then(function (answer) {
+        .then(async function (answer) {
             userOption = answer.action;
             switch (answer.action) {
 
                 case "Add departments":
-                    addDepartment(connection);
+                    await viewDepartmentTable(connection);
+                    addDepartment(connection, options);
                     break;
 
                 case "Add roles":
-                    addRole(connection);
+                    await viewRoleTable(connection);
+                    addRole(connection, options);
                     break;
 
                 case "Add employees":
-                    addEmployee(connection);
+                    await viewEmployeeTable(connection);
+                    addEmployee(connection, options);
                     break;
 
                 case "View departments":
@@ -85,23 +89,26 @@ const options = () => {
                     break;
 
                 case "Update employee roles":
-                    updateEmployeeRole(connection);
+                    updateEmployeeRole(connection, options);
                     break;
 
                 case "Update employee managers":
-                    updateEmployeeManager(connection);
+                    updateEmployeeManager(connection, options);
                     break;
 
                 case "Delete employee":
-                    deleteEmployee(connection);
+                    await viewEmployeeTable(connection);
+                    deleteEmployee(connection, options);
                     break;
 
                 case "Delete roles":
-                    deleteRole(connection);
+                    await viewRoleTable(connection);
+                    deleteRole(connection, options);
                     break;
 
                 case "Delete departments":
-                    deleteDepartment(connection);
+                    await viewDepartmentTable(connection);
+                    deleteDepartment(connection, options);
                     break;
 
                 case "exit":
@@ -138,19 +145,17 @@ function displayBoard() {
 
 }
 
-
-
 const main = () => {
     displayBoard();
     options();
 }
-
-// module.exports={options};
 
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
     main();
 });
+
+// exports.queryOptions = options;
 
 

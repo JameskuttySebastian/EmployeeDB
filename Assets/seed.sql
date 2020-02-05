@@ -59,25 +59,42 @@ VALUES
     ('Charlotte', 'Pang', 3, 1),
     ('Julie', 'Robert-Loid', 3, 1),
     ('Mervin', 'Attaru', 4, NULL),
-    ('Adaar', 'Popot', 5, 4),
-    ('Margorine', 'Mendoza', 6, 4),
+    ('Adaar', 'Popot', 5, 6),
+    ('Margorine', 'Mendoza', 6, 6),
     ('Arun', 'Koshy', 7, NULL),
-    ('Ryan', 'Leong', 8, 7),
-    ('Ryan', 'Chew', 9, 7),
+    ('Ryan', 'Leong', 8, 9),
+    ('Ryan', 'Chew', 9, 9),
     ('Wei', 'Leong', 10, NULL),
-    ('Sebastian', 'Tey', 11, 10),
-    ('Rohan', 'Philips', 12, 10) ;
+    ('Sebastian', 'Tey', 11, 12),
+    ('Rohan', 'Philips', 12, 12) ;
+
+-- select * from employee
 
 
+-- select dep_id as `Department ID`, dep_name as `Department Name` from department
+
+-- select role.rol_id as `Role_ID`, role.title as `Title`, role.salary as `Salary`, department.dep_name as `Department`
+-- from role inner join department on department.dep_id = role.dep_id
+
+-- select * from employee
+
+-- select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`
+-- from employee inner join `role` on employee.rol_id = role.rol_id
+
+-- select * from employee where manager_id is not null
 
 
+-- select a.emp_id as `Employee_ID`, CONCAT_WS(', ',  a.last_name, a.first_name) as `Name`,  
+-- c.title as `Title` , CONCAT_WS(', ',  b.last_name, b.first_name) as `Manager`
+-- from (
+-- (select * from employee where manager_id is not null) a 
+-- inner join (select * from employee) b on a.manager_id = b.emp_id
+-- inner join (select * from `role`) c on a.rol_id = c.rol_id) 
 
+-- select c.dep_name, sum(salary) from employee a
+-- inner join role b on a.rol_id = b.rol_id
+-- inner join department c on b.dep_id = c.dep_id group by c.dep_name
 
+select * from employee;
 
-
-
-
-
-
-
-
+UPDATE `employeedb`.`employee` SET `rol_id` = ?  WHERE `emp_id` = ? ;
