@@ -47,7 +47,7 @@ const addRole = (connection, options) => {
                     throw err;
                     console.log("Error : " + err);
                 }
-                console.log("New Role aded : " + resp);
+                console.log("New Role added : " + resp);
                 options();
             })
     })
@@ -58,28 +58,46 @@ const addEmployee = (connection, options) => {
     inquirer
         .prompt([
             {
-                name: "title",
+                name: "first_name",
                 type: "input",
-                message: "What is the name of the new Role?"
+                message: "What is the First Name of the new Employee?"
             },
             {
-                name: "salary",
+                name: "last_name",
                 type: "input",
-                message: "What is the Salary for new Role?"
+                message: "What is the Last Name of the new Employee?"
             },
             {
-                name: "dep_id",
+                name: "rol_id",
                 type: "input",
-                message: "What is the Department ID for new role?"
+                message: "What is the Role ID for new Employee?"
+            },
+            {
+                name: "manager_id",
+                type: "input",
+                message: "What is the Department ID for new role?",
+                default: "null"
             }
         ]).then(function(answer){
+
+            let qry , data;
+
+            if(answer.manager_id === "null"){
+                qry = `INSERT INTO employee (first_name,last_name,rol_id) VALUES (?,?,?)`
+                data = [answer.first_name, answer.last_name, answer.rol_id]
+            }
+            else {
+                qry =`INSERT INTO employee (first_name,last_name,rol_id,manager_id) VALUES (?,?,?,?)`
+                data = [answer.first_name, answer.last_name, answer.rol_id, answer.manager_id]
+            }
+
         console.log(answer);
-        connection.query("insert into role set ?", answer, function(err, resp){
+        connection.query(qry, data, function(err, resp){
             if(err){
                 throw err;
                 console.log("Error : " + err);
             }
-            console.log("New Role aded : " + resp);
+            console.log("New Role added : " + resp);
             options();
         })
     })
