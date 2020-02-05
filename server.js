@@ -89,6 +89,7 @@ const options = () => {
                     break;
 
                 case "Update employee roles":
+                    await viewRoleTable(connection);
                     await viewEmployeeTable(connection);
                     updateEmployeeRole(connection, options);
                     break;

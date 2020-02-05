@@ -14,8 +14,8 @@ const viewDepartment = (connection, options) => {
 
 const viewRole = (connection, options) => {
     try{
-        const qry = "select role.rol_id as `Role_ID`, role.title as `Title`, role.salary as `Salary`, department.dep_name as `Department` " +
-            "from role inner join department on department.dep_id = role.dep_id";
+        const qry = "select role.rol_id as `Role_ID`, role.title as `Title`, role.salary as `Salary`, department.dep_name as `Department`, " +
+            "department.dep_id as `Department_ID` from role inner join department on department.dep_id = role.dep_id";
         connection.query(qry, function(err, res) {
             console.table(res);
             options();
@@ -28,8 +28,10 @@ const viewRole = (connection, options) => {
 
 const viewEmployee = (connection, options) => {
     try{
-        const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`" +
-        "from employee inner join `role` on employee.rol_id = role.rol_id";
+        const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`," +
+            "mgr.Name as `Manager` from employee inner join `role` on employee.rol_id = role.rol_id" +
+            "inner join (select emp_id, CONCAT_WS(', ',  last_name, first_name) as `Name` from employee) as mgr" +
+            "on employee.manager_id = mgr.emp_id";
         connection.query(qry, function(err, res) {
             console.table(res);
             options();
@@ -107,8 +109,8 @@ const viewRoleTable = (connection) => {
 const viewEmployeeTable = (connection) => {
     return new Promise(function (resolve, reject) {
         try {
-            const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`" +
-                "from employee inner join `role` on employee.rol_id = role.rol_id";
+            const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`," +
+                "`role`.rol_id as `Role_id`, employee.manager_id as `Manager_ID` from employee inner join `role` on employee.rol_id = role.rol_id";
             connection.query(qry, function (err, res) {
                 resolve(console.table(res));
             });
