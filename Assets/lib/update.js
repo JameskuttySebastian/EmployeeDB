@@ -1,10 +1,10 @@
+const inquirer = require('inquirer');
 
-
-const updateEmployeeRole = (connection) => {
+const updateEmployeeRole = (connection, options) => {
 
 }
 
-const updateEmployeeManager = (connection) => {
+const updateEmployeeManager = (connection, options) => {
 
 }
 
