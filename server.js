@@ -1,6 +1,7 @@
 //npm packages
 //for mysql connection
 const mysql = require("mysql");
+require('events').EventEmitter.defaultMaxListeners = 15;
 
 const {addDepartment, addRole, addEmployee} = require('./Assets/lib/create');
 const {deleteDepartment, deleteRole, deleteEmployee} = require('./Assets/lib/delet');
