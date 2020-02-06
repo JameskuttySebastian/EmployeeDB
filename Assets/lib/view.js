@@ -28,9 +28,9 @@ const viewRole = (connection, options) => {
 
 const viewEmployee = (connection, options) => {
     try{
-        const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`," +
-            "mgr.Name as `Manager` from employee inner join `role` on employee.rol_id = role.rol_id" +
-            "inner join (select emp_id, CONCAT_WS(', ',  last_name, first_name) as `Name` from employee) as mgr" +
+        const qry = "select employee.emp_id as `Employee_ID`, CONCAT_WS(', ',  last_name, first_name) as `Name`, `role`.title as `Title`,\n" +
+            "mgr.Name as `Manager` from employee inner join `role` on employee.rol_id = role.rol_id\n" +
+            "left join (select emp_id, CONCAT_WS(', ',  last_name, first_name) as `Name` from employee) as mgr\n" +
             "on employee.manager_id = mgr.emp_id";
         connection.query(qry, function(err, res) {
             console.table(res);
